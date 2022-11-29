@@ -15,6 +15,10 @@ public class Process extends Reseau{
         }
     }
 
+    // public Process f (Stepper s) {
+    //     return s.step(new Process(5), "NTM") ; 
+    // }
+
     @Override
     public int[][] messageProco(int index) {
         // TODO Auto-generated method stub

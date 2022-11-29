@@ -30,7 +30,7 @@ public class ImageEditModel {
     }
 
     public void fillzone(Rectangle z, int[][] pixels){
-        if(verifyLength(z, pixels)){
+        
            int p = 0;
            int l = 0;
             for(int i= z.x;  i<z.x + z.getWidth(); i++){
@@ -41,7 +41,7 @@ public class ImageEditModel {
                     if(pixels[p].length > l) l++;
                 }
             }
-        }
+        
     }
 
     public void clearzone(Rectangle z){

@@ -19,6 +19,8 @@ public class ImageEditView extends JFrame {
         this.model = model;
         this.setTitle("TP10 POO");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        //Menu de barre
         JMenuBar barre = new JMenuBar();
         this.setJMenuBar(barre);
         cutButton = new JButton("Cut");
@@ -27,8 +29,11 @@ public class ImageEditView extends JFrame {
         barre.add(cutButton);
         barre.add(undoButton);
         barre.add(redoButton);
+
+
         this.imagepane = new ImagePane();
-        this.setContentPane(this.getContentPane());
+        this.add(this.imagepane);    
+        imagepane.paintComponent(model.getImage().getGraphics()) ;  
     }
 
     public class ImagePane extends JPanel{
