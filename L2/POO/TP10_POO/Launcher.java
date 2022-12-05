@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.awt.*;
 
 public class Launcher {
     
@@ -7,6 +8,8 @@ public class Launcher {
         ImageEditModel img = new ImageEditModel("L2/POO/TP10_POO/landscape.png");
         ImageEditView view = new ImageEditView(img);
         view.pack();
-        view.setVisible(true);
+        EventQueue.invokeLater(() -> {
+            view.setVisible(true);   
+        }); 
     }
 }

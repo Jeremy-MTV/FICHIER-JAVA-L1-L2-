@@ -1,4 +1,4 @@
-package L2.POO.POOinfo2;
+package L2.POO.POOinfo2_TDnote;
 
 public abstract class Reseau {
     protected final int population;

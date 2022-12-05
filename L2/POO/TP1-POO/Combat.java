@@ -1,3 +1,5 @@
+package L2.POO.TP1POO;
+
 public class Combat {
 
     public static void main(String[] args) {

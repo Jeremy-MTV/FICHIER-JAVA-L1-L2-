@@ -1,5 +1,6 @@
 
 import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.JPanel;
@@ -14,6 +15,9 @@ public class ImageEditView extends JFrame {
     //Champs graphique
     ImagePane imagepane;
     ImageEditModel model;
+
+    //Variable cut 
+    int cut;
 
     ImageEditView(ImageEditModel model){
         this.model = model;
@@ -31,24 +35,53 @@ public class ImageEditView extends JFrame {
         barre.add(redoButton);
 
 
-        this.imagepane = new ImagePane();
-        this.add(this.imagepane);    
-        imagepane.paintComponent(model.getImage().getGraphics()) ;  
+        imagepane = new ImagePane() ; 
+        setContentPane(imagepane);
+
+        
+
+        cutButton.addActionListener(ev -> {
+            cut++;
+            model.saveCut(imagepane.selection.getRectangle());
+            repaint();
+            cutButton.setEnabled(false);
+            undoButton.setEnabled(true);
+            redoButton.setEnabled(true);
+        });
+
+        undoButton.addActionListener(ev -> {
+            if (model.getUndoManager().canUndo()) {
+                if(cut <= 1) undoButton.setEnabled(false);
+                model.getUndoManager().undo();
+                repaint();
+            }
+        });
+
+        redoButton.addActionListener(ev -> {
+            if (model.getUndoManager().canRedo()) {
+                System.out.print("impossible");
+                model.getUndoManager().redo() ; 
+                repaint();
+                cutButton.setEnabled(false);
+                redoButton.setEnabled(false) ; 
+            }
+        });
+
     }
 
     public class ImagePane extends JPanel{
         Selection selection = new Selection();
 
-        public void paintComponent(Graphics g){
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
             g.drawImage(model.getImage(), 0, 0, this);
-            ((Graphics2D) g).draw(selection.getRectangle());
+            ((Graphics2D)g).draw(selection.getRectangle());
         }
 
         ImagePane(){
-            this.setPreferredSize(new Dimension(this.getSize()));
-            this.addMouseListener(selection);
-            this.addMouseMotionListener(selection);
+            setPreferredSize(new Dimension(model.getImage().getWidth() , model.getImage().getHeight()));
+            addMouseListener(selection);
+            addMouseMotionListener(selection);
         }
 
         public class Selection extends MouseAdapter implements MouseMotionListener{
@@ -58,21 +91,25 @@ public class ImageEditView extends JFrame {
            int y2;
 
            Rectangle getRectangle(){
-            return new Rectangle(x2-x1, y2-y1);
-           }
+            return new Rectangle(new Point(Math.min(x1, x2) , Math.min(y1 , y2)) , new Dimension(Math.abs(x1-x2) , Math.abs(y1-y2))) ; 
+            }
 
            public void mousePressed(MouseEvent event){
-            x1 = event.getX();
-            y1 = event.getY();
-            cutButton.setEnabled(false);
-            imagepane.repaint();
+                x1 = event.getX();
+                y1 = event.getY();
+                x2 = x1;
+                y2 = y1;
+                cutButton.setEnabled(false);
+                imagepane.repaint();
            }
 
            public void mouseDragged(MouseEvent event){
-            x2 = event.getX();
-            y2 = event.getY();
-            cutButton.setEnabled(false);
-            imagepane.repaint();
+                x2 = event.getX();
+                y2 = event.getY();
+                if (x1 != x2 || y1 != y2) {
+                    cutButton.setEnabled(true);
+                }
+                imagepane.repaint();
            }
 
            public void mouseMoved(MouseEvent event){};
