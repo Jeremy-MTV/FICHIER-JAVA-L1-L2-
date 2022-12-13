@@ -1,4 +1,3 @@
-package L2.POO.TP11_POO;
 
 import java.util.Iterator;
 
@@ -6,9 +5,17 @@ public class TestIter<E> implements Iterator<E>{
     private E[] tableau;
     private int index = 0;
 
-    public TestIter(E[] tableau){
-		this.tableau = tableau;
+    public int getIndex() {
+        return index;
+    }
+
+    public TestIter(E[] tab){
+		this.tableau = tab;
 	}
+
+    public TestIter(){
+        this.tableau = null;
+    }
 
     public void setIndex(int index) {
         this.index = index;
@@ -16,17 +23,16 @@ public class TestIter<E> implements Iterator<E>{
 
     @Override
     public boolean hasNext() {
-        return index < tableau.length && tableau[index] != null;
-    }
+        return index < tableau.length && tableau[index] != null;    }
 
     @Override
     public E next() throws IllegalStateException {
-        try{
-            E element = tableau[index];
-            setIndex(index++);
-            return element;
-        }catch(Exception e){
-            throw new IllegalStateException("Erreur");
+        if(hasNext()){
+           E element = tableau[index];
+           index++;
+           return element;
+        }else{
+            throw new IllegalStateException();
         }
     }
 
